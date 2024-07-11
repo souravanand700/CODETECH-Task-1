@@ -1,0 +1,45 @@
+import re
+
+def check_password_strength(password):
+    # Minimum length
+    min_length = 8
+    # Regular expressions for different character types
+    has_digit = re.search(r'\d', password)
+    has_uppercase = re.search(r'[A-Z]', password)
+    has_lowercase = re.search(r'[a-z]', password)
+    has_special = re.search(r'[@$!%*?&]', password)
+
+    # Calculate length score
+    length_score = min(len(password) / min_length, 1)
+
+    # Calculate complexity score
+    complexity_score = 0
+    if has_digit:
+        complexity_score += 0.25
+    if has_uppercase:
+        complexity_score += 0.25
+    if has_lowercase:
+        complexity_score += 0.25
+    if has_special:
+        complexity_score += 0.25
+
+    # Calculate total strength score
+    strength_score = (length_score + complexity_score) / 2
+    strength_percentage = strength_score * 100
+
+    # Determine strength level
+    if strength_percentage >= 80:
+        strength_level = "Strong"
+    elif strength_percentage >= 50:
+        strength_level = "Moderate"
+    else:
+        strength_level = "Weak"
+
+    return strength_percentage, strength_level
+
+# Example usage:
+if __name__ == "__main__":
+    password = input("Enter your password: ")
+    strength_percentage, strength_level = check_password_strength(password)
+    print(f"Password strength: {strength_level}")
+    print(f"Strength percentage: {strength_percentage:.2f}%")
